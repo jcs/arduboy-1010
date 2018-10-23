@@ -530,8 +530,10 @@ draw_screen(void)
 		if (ts == 0)
 			continue;
 
-		i = (((BOARD_X - 10) / ONDECK) * (x + 1)) -
-		    ((BOARD_X - 10) / (ONDECK * 2));
+		i = (((BOARD_X - 6) / ONDECK) * (x + 1)) -
+		    ((BOARD_X - 6) / (ONDECK * 2));
+		if (i < 0)
+			i = 0;
 
 		draw_shape(ts,
 		    i - ((ts->width * PREVIEW_SIZE) / 2),
@@ -539,9 +541,9 @@ draw_screen(void)
 		    PREVIEW_SIZE, preview_color);
 
 		if (x == game.ondecksel && !game.curshape) {
-			arduboy.drawPixel(i, 59, WHITE);
-			arduboy.drawLine(i - 1, 60, i + 1, 60, WHITE);
-			arduboy.drawLine(i - 2, 61, i + 2, 61, WHITE);
+			arduboy.drawPixel(i, 60, WHITE);
+			arduboy.drawLine(i - 1, 61, i + 1, 61, WHITE);
+			arduboy.drawLine(i - 2, 62, i + 2, 62, WHITE);
 		}
 	}
 
