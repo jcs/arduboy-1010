@@ -23,6 +23,10 @@ Hold down both A+B buttons and:
 - Down to make it dimmer, or
 - Left or Right to reset the game.
 
+## Flashing
+
+Use `avrdude` or similar flashing program to flash `arduboy-1010.hex`.
+
 ## Compiling
 
 Requires
@@ -32,4 +36,5 @@ Adjust the path to `Arduino.mk` in `Makefile`.
 
 Compile with `make` (requires GNU Make, which is `gmake` on OpenBSD).
 
-Connect your Arduboy and power it on, then flash it with `make upload`.
+Connect your Arduboy and power it on, then flash it with `make upload`
+which should reboot the Arduboy into bootloader mode and flash the game.
