@@ -451,7 +451,8 @@ loop(void)
 			game.curshape = game.ondeck[game.ondecksel];
 			game.ondeck[game.ondecksel] = 0;
 
-			if (!move_to_clear(&shapes[game.curshape])) {
+			if (!move_to_clear(&shapes[game.curshape]) &&
+			    left_ondeck() == 0) {
 				game_over();
 				return;
 			}
@@ -625,6 +626,9 @@ move_to_clear(const shape *s)
 		for (game.x = 0; game.x <= BOARD_SIZE - s->width; game.x++)
 			if (shape_clear(s, game.x, game.y))
 				return true;
+
+	/* make sure we're not hanging off the bottom corner of the board */
+	game.x = game.y = 0;
 
 	return false;
 }
