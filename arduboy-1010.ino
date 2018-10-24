@@ -244,7 +244,13 @@ static int screen_backlight = SCREEN_MAX;
 void
 setup(void)
 {
-	arduboy.begin();
+	/* do arduboy.begin() without bootLogo() and LED flashing */
+	arduboy.boot();
+	arduboy.display();
+	arduboy.flashlight();
+	arduboy.systemButtons();
+	arduboy.waitNoButtons();
+
 	arduboy.initRandomSeed();
 
 	/*
