@@ -531,8 +531,8 @@ draw_screen(void)
 		if (ts == 0)
 			continue;
 
-		i = (((BOARD_X - 6) / ONDECK) * (x + 1)) -
-		    ((BOARD_X - 6) / (ONDECK * 2));
+		i = (((BOARD_X - 4) / ONDECK) * (x + 1)) -
+		    ((BOARD_X - 4) / (ONDECK * 2));
 		if (i < 0)
 			i = 0;
 
