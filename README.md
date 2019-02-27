@@ -1,5 +1,7 @@
 # 1010 for Arduboy
 
+![https://jcs.org/photos/2019/02/27/arduboy_1010/thumbnail/fullwidthx](https://jcs.org/photos/2019/02/27/arduboy_1010/thumbnail/fullwidthx)
+
 Gameplay and scoring modeled after the
 [1010!](https://itunes.apple.com/us/app/1010/id911793120?mt=8)
 game for iOS.
