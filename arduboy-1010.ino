@@ -108,111 +108,111 @@ const byte preview_color[PREVIEW_SIZE] PROGMEM = {
 
 /* tile shapes */
 typedef struct {
-	const byte width, height;
+	const byte width, height, weight;
 	const byte tiles[9];
 } shape;
 
 const shape shapes[] = {
-	{ 0, 0, { // empty
+	{ 0, 0, 0, { // empty
 		0,
 		}
 	},
-	{ 1, 1, { // dot
+	{ 1, 1, 10, { // dot
 		1,
 		}
 	},
-	{ 2, 2, { // 2x2 square
+	{ 2, 2, 10, { // 2x2 square
 		1, 1,
 		1, 1,
 		}
 	},
-	{ 3, 3, { // 3x3 square
+	{ 3, 3, 1, { // 3x3 square
 		1, 1, 1,
 		1, 1, 1,
 		1, 1, 1,
 		}
 	},
-	{ 2, 1, { // 2x1 horizontal
+	{ 2, 1, 10, { // 2x1 horizontal
 		1, 1,
 		}
 	},
-	{ 3, 1, { // 3x1 horizontal
+	{ 3, 1, 10, { // 3x1 horizontal
 		1, 1, 1,
 		}
 	},
-	{ 4, 1, { // 4x1 horizontal
+	{ 4, 1, 10, { // 4x1 horizontal
 		1, 1, 1, 1,
 		}
 	},
-	{ 5, 1, { // 5x1 horizontal
+	{ 5, 1, 1, { // 5x1 horizontal
 		1, 1, 1, 1, 1,
 		}
 	},
-	{ 1, 2, { // 1x2 vertical
+	{ 1, 2, 10, { // 1x2 vertical
 		1,
 		1,
 		}
 	},
-	{ 1, 3, { // 1x3 vertical
-		1,
-		1,
-		1,
-		}
-	},
-	{ 1, 4, { // 1x4 vertical
-		1,
+	{ 1, 3, 10, { // 1x3 vertical
 		1,
 		1,
 		1,
 		}
 	},
-	{ 1, 5, { // 1x5 vertical
-		1,
+	{ 1, 4, 10, { // 1x4 vertical
 		1,
 		1,
 		1,
 		1,
 		}
 	},
-	{ 2, 2, { // 2x2 elbow
+	{ 1, 5, 1, { // 1x5 vertical
+		1,
+		1,
+		1,
+		1,
+		1,
+		}
+	},
+	{ 2, 2, 10, { // 2x2 elbow
 		1, 1,
 		0, 1,
 		}
 	},
-	{ 2, 2, { // 2x2 elbow
+	{ 2, 2, 10, { // 2x2 elbow
 		1, 0,
 		1, 1,
 		}
 	},
-	{ 2, 2, { // 2x2 elbow
+	{ 2, 2, 10, { // 2x2 elbow
 		1, 1,
 		1, 0,
 		}
 	},
-	{ 2, 2, { // 2x2 elbow
+	{ 2, 2, 10, { // 2x2 elbow
 		0, 1,
 		1, 1,
 		}
 	},
-	{ 3, 3, { // 3x3 elbow
+	{ 3, 3, 10, { // 3x3 elbow
 		1, 1, 1,
 		0, 0, 1,
 		0, 0, 1,
 		}
 	},
-	{ 3, 3, { // 3x3 elbow
+	{ 3, 3, 10, { // 3x3 elbow
 		1, 0, 0,
 		1, 0, 0,
 		1, 1, 1,
 		}
 	},
-	{ 3, 3, { // 3x3 elbow
+	{ 3, 3, 10, { // 3x3 elbow
 		1, 1, 1,
 		1, 0, 0,
 		1, 0, 0,
 		}
 	},
-	{ 3, 3, { // 3x3 elbow
+	{ 3, 3, 10, { // 3x3 elbow
 		0, 0, 1,
 		0, 0, 1,
 		1, 1, 1,
@@ -242,6 +242,7 @@ static int8_t ledsweep[3] = { 0 };
 static unsigned long dpad_millis_next = 0;
 static bool dpad_repeatn = false;
 static int screen_backlight = SCREEN_MAX;
+static int shape_weights = 0;
 
 void
 setup(void)
@@ -601,13 +602,27 @@ left_ondeck(void)
 void
 new_shapes(void)
 {
-	byte x;
+	byte x, j, r;
 
 	if (left_ondeck())
 		return;
 
-	for (x = 0; x < ONDECK; x++)
-		game.ondeck[x] = random(1, sizeof(shapes) / sizeof(shape));
+	if (!shape_weights) {
+		for (x = 0; x < sizeof(shapes) / sizeof(shape); x++)
+			shape_weights += shapes[x].weight;
+	}
+
+	for (j = 0; j < ONDECK; j++) {
+		r = random(1, shape_weights);
+
+		for (x = 0; x < sizeof(shapes) / sizeof(shape); x++) {
+			if (r < shapes[x].weight) {
+				game.ondeck[j] = x;
+				break;
+			}
+			r -= shapes[x].weight;
+		}
+	}
 }
 
 bool
