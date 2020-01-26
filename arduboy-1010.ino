@@ -413,7 +413,7 @@ loop(void)
 	}
 
 	if (game.over) {
-		/* if we achieved the high score, flash green, else red */
+		/* if we achieved the high score, pulse green, else red */
 		x = (game.score == game.hiscore ? 1 : 0);
 
 		if (ledsweep[x] == 1) {
