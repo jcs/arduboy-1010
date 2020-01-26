@@ -225,6 +225,7 @@ void	new_game(void);
 void	save_game(void);
 uint8_t	pressed_dpad_autorepeat(void);
 bool	place_shape(void);
+bool	any_moves_left(void);
 void	draw_screen(void);
 void	draw_board(void);
 void	draw_shape(const shape *s, const byte, const byte, const byte,
@@ -233,6 +234,7 @@ byte	left_ondeck(void);
 void	new_shapes(void);
 bool	shape_clear(const shape *s, const byte, const byte);
 bool	move_to_clear(const shape *s);
+void	game_over(void);
 
 /* these don't need to be preserved in game state */
 static byte leds[3] = { 0 };
@@ -271,6 +273,8 @@ setup(void)
 
 		if (game.over)
 			new_game();
+		else if (!any_moves_left())
+			game_over();
 	}
 	else
 		new_game();
@@ -682,6 +686,21 @@ explode_swept(void)
 }
 
 bool
+any_moves_left(void)
+{
+	int x;
+
+	for (x = 0; x < ONDECK; x++) {
+		if (game.ondeck[x] != 0 &&
+		    move_to_clear(&shapes[game.ondeck[x]])) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool
 place_shape(void)
 {
 	const shape *s = &shapes[game.curshape];
@@ -760,10 +779,7 @@ place_shape(void)
 
 	save_game();
 
-	/* if there is only one piece left and it can't be placed, don't bother
-	 * waiting for the user to select it */
-	if (left_ondeck() == 1 &&
-	    !move_to_clear(&shapes[game.ondeck[game.ondecksel]])) {
+	if (!any_moves_left()) {
 		game_over();
 		return false;
 	}
