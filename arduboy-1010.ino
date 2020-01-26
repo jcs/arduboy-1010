@@ -542,9 +542,7 @@ draw_screen(void)
 			continue;
 
 		i = (((BOARD_X - 4) / ONDECK) * (x + 1)) -
-		    ((BOARD_X - 4) / (ONDECK * 2));
-		if (i < 0)
-			i = 0;
+		    ((BOARD_X - 4) / (ONDECK * 2)) + x;
 
 		draw_shape(ts,
 		    i - ((ts->width * PREVIEW_SIZE) / 2),
