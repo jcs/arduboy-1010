@@ -375,7 +375,7 @@ game_over(void)
 	game.over = true;
 	ledsweep[0] = 1;
 
-	arduboy.fillRect(0, 40, BOARD_X - 1, 64, BLACK);
+	arduboy.fillRect(0, 38, BOARD_X - 1, 66, BLACK);
 
 	arduboy.setCursor(0, 50);
 	arduboy.print(F("Game Over"));
